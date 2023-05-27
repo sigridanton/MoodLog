@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+
+<div class="container">
+  <img src="https://www.thisiscolossal.com/wp-content/uploads/2020/09/ghibli-9-960x519@2x.jpg" alt="">
+  <div class="bottom-left">Bottom Left</div>
+  <div class="top-left">Top Left</div>
+  <div class="top-right">
+    {% if user.is_authenticated %}
+    <div class="link"><a href="{% url 'logout' %}">Log Out</a></div>
+    {% else %}
+    <div class="link"><a href="{% url 'login' %}">Log In</a></div>
+    {% endif %}
+  </div>
+  <div class="bottom-right">Bottom Right</div>
+  <div class="centered">Mood</div>
+</div> 
+
+
+{% if user.is_authenticated %}
+<br>
+<div class="p">hi {{ user.username }}</div>
+<div class="link"><a href="{% url 'logout' %}">Log Out</a></div>
+
+<div class="p">how did your day go?</div>
+<br>
+    <div class="container">
+        <a href="review" class="button">1</a>
+        <a href="review" class="button">2</a>
+        <a href="review" class="button">3</a>
+        <a href="review" class="button">4</a>
+        <a href="review" class="button">5</a>
+        <a href="review" class="button">6</a>
+        <a href="review" class="button">7</a>
+    </div>
+<br><br><br>
+    {{ calendar | safe }}
+
+{% else %}
+  <p>You are not logged in</p>
+  <a href="{% url 'login' %}">Log In</a>
+  <br>
+  <br>
+  <a href="{% url 'signup' %}">Sign Up</a>
+{% endif %}
+<br><br><br><br>
+
+{% endblock %}

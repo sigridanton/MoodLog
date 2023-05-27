@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Londrina+Shadow&family=Macondo&family=Quicksand&family=Vast+Shadow&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <title>{% block title %}Base{% endblock %}</title>
+
+  <style>
+
+html,body{
+    margin:0;
+    height:100%;
+}
+img{
+  display:block;
+  width:100%; 
+  height:100%;
+  object-fit: cover;
+}
+
+div.big {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+      font-size: 16rem;
+      font-family: 'Macondo', cursive;
+      position: absolute;
+      color: #ffffff;
+    }
+
+div.link {
+      display: flex;
+      align-items: center;
+      justify-content: right;
+      padding-right: 16px;
+      font-size: 2rem;
+      
+      font-family: 'Macondo', cursive;
+      color: #ffffff;
+    }
+
+.link > a{
+      color: rgb(255, 255, 255);
+    }
+
+div.p {
+      display: flex;
+      align-items: center;
+      justify-content: left;
+      padding-right: 20px;
+      padding-left: 20px;
+      font-size: 2rem;
+      font-family: 'Macondo', cursive;
+    }
+
+table {
+  width: 100%;
+}
+
+a.button {
+    color: #000000;
+    text-decoration: none;
+    padding: 10px;
+    border: 2px solid #c8c1c3;
+    border-radius: 3px;
+    background-color: #fff;
+    transition: all .3s;
+    -webkit-transition: all .3s; /* safari */
+    -moz-transition: all .3s; /* mozilla */
+    -ms-transition: all .3s; /* IE */
+    -o-transition: all .3s; /* opera */
+    padding: 30px;
+  
+}
+
+a.button:hover,
+a.button:focus,
+a.button:active {
+    background-color: #2196f3;
+    color: #fff;
+}
+
+
+
+ /* Container holding the image and the text */
+ .container {
+  position: relative;
+  text-align: center;
+  color: white;
+}
+
+/* Bottom left text */
+.bottom-left {
+  position: absolute;
+  bottom: 36px;
+  left: 40px;
+}
+
+/* Top left text */
+.top-left {
+  position: absolute;
+  top: 36px;
+  left: 40px;
+}
+
+/* Top right text */
+.top-right {
+  position: absolute;
+  top:36px;
+  right: 40px;
+}
+
+/* Bottom right text */
+.bottom-right {
+  position: absolute;
+  bottom: 36px;
+  right: 40px;
+}
+
+/* Centered text */
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 16rem;
+  font-family: 'Macondo', cursive;
+} 
+
+
+  </style>
+</head>
+<body>
+  <main>
+    {% block content %}
+    {% endblock %}
+  </main>
+</body>
+</html>

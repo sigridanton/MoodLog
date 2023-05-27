@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="big">how did your day go?</div>
+<br><br><br><br><br><br><br>
+<div class="p">How did your day go?</div>
+
+<form method="post" action="/review/">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="sumbit">Done</button>
+</form>
+
+
+{% endblock %}
