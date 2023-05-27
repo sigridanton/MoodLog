@@ -3,8 +3,8 @@ import datetime
 from django.db import models
 from Calendar.models import Day
 
-year = 2019
-month = 1
+year = 2023
+month = 5
 
 class Calendar(HTMLCalendar):
     def __init__(self, firstweekday: int = 0) -> None:
@@ -14,10 +14,32 @@ class Calendar(HTMLCalendar):
         if day == 0:
             mood = 0
         else:
-            mood = Day.objects.all().filter(date = datetime.date(year, month, day))
-        #string = r'{% static "assets/6.png" %}'
-        string = r"{% static6.jpg %}"
-        return '<td class="%s">%d<br><img src="%r" width="50" height="50" /></td>' % (self.cssclasses[weekday], day, string)
+            try:
+                mood = Day.objects.all().filter(date = datetime.date(year, month, day))[0].mood
+            except:
+                mood = 0
+        print(mood)
+        #string = r"{% static 'images/six.png' %}"
+        if mood == 0:
+            color = "white"
+        elif mood == 1:
+            color = "purple"
+        elif mood == 2:
+            color = "blue"
+        elif mood == 3:
+            color = "#ff6347"
+        elif mood == 4:
+            color = "yellow"
+        elif mood == 5:
+            color = "orange"
+        elif mood == 6:
+            color = "red"
+        elif mood == 7:
+            color = "pink"
+        else:
+            color = "white"
+        
+        return '<td class="%s" bgcolor="%s">%d</td>' % (self.cssclasses[weekday], color, day)
     
     def formatweek(self, theweek):
         """

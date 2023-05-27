@@ -19,6 +19,7 @@ class SignUpView(generic.CreateView):
 def home(request):
     context = {}
     context["calendar"] = Calendar(calendar.MONDAY).formatmonth(datetime.date.today().year, datetime.date.today().month)
+    print(Calendar(calendar.MONDAY).formatmonth(2023, 5))
     return render(request, "home.html", context)
 
 def review(request):
