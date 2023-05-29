@@ -15,29 +15,32 @@ class Calendar(HTMLCalendar):
             mood = 0
         else:
             try:
-                mood = Day.objects.all().filter(date = datetime.date(year, month, day))[0].mood
+                days = Day.objects.all().filter(date = datetime.date(year, month, day))
+                mood = days[len(days)-1].mood
             except:
                 mood = 0
         print(mood)
         #string = r"{% static 'images/six.png' %}"
-        if mood == 0:
+        if mood == "0":
             color = "white"
-        elif mood == 1:
-            color = "purple"
-        elif mood == 2:
-            color = "blue"
-        elif mood == 3:
-            color = "#ff6347"
-        elif mood == 4:
-            color = "yellow"
-        elif mood == 5:
-            color = "orange"
-        elif mood == 6:
-            color = "red"
-        elif mood == 7:
-            color = "pink"
+        elif mood == "1":
+            color = "#0C3F0D"
+        elif mood == "2":
+            color = "#448936"
+        elif mood == "3":
+            color = "#6DB25E"
+        elif mood == "4":
+            color = "#A2CF8A"
+        elif mood == "5":
+            color= "#C9E079"
+        elif mood == "6":
+            color = "#EBEC76"
+        elif mood == "7":
+            color = "#F0E456"
         else:
             color = "white"
+
+        #<img src="%s" width = "100" height = "auto" alt="">
         
         return '<td class="%s" bgcolor="%s">%d</td>' % (self.cssclasses[weekday], color, day)
     

@@ -1,6 +1,6 @@
 import calendar
 import datetime
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
@@ -23,6 +23,12 @@ def home(request):
     return render(request, "home.html", context)
 
 def review(request):
+    if request.method == "POST":
+        form = DayForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("/")
+
     context ={}
     context['form']= DayForm()
     context["calendar"] = Calendar(calendar.MONDAY).formatmonth(datetime.date.today().year, datetime.date.today().month)
