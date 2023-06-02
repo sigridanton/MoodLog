@@ -6,6 +6,12 @@ from Calendar.models import Day
 year = 2023
 month = 5
 
+class Date():
+    def __init__(self, day, month, year) -> None:
+        self.day = day
+        self.month = month
+        self.year = year
+
 class Calendar(HTMLCalendar):
     def __init__(self, firstweekday: int = 0) -> None:
         super().__init__(firstweekday)
@@ -19,7 +25,6 @@ class Calendar(HTMLCalendar):
                 mood = days[len(days)-1].mood
             except:
                 mood = 0
-        print(mood)
         #string = r"{% static 'images/six.png' %}"
         if mood == "0":
             color = "white"
@@ -47,7 +52,7 @@ class Calendar(HTMLCalendar):
         else:
             num = str(day)
         
-        return '<td height="70px" class="%s" bgcolor="%s">%s</td>' % (self.cssclasses[weekday], color, num)
+        return '<td class="%s" bgcolor="%s"><button class="daybt" type="submit" name="%s">%s</td>' % (self.cssclasses[weekday], color, num, num)
     
     def formatweek(self, theweek):
         """

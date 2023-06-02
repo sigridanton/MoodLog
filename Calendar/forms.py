@@ -3,6 +3,9 @@ from django import forms
 from Calendar.models import Day
 
 
+class ButtonForm(forms.Form):
+    pass
+
 class DayForm(forms.ModelForm):
     # mood =
     MOOD_CHOICES = [
@@ -37,7 +40,7 @@ class DayForm(forms.ModelForm):
 
     mood = forms.CharField(label='Mood', widget=forms.RadioSelect(choices=MOOD_CHOICES))
     notes = forms.CharField(label="Notes")
-    emotions = forms.CharField(label='Mood', widget=forms.RadioSelect(choices=EMOTION_CHOICES))
+    emotions = forms.MultipleChoiceField(label='Mood', choices=EMOTION_CHOICES)
     date = forms.DateField(widget=forms.widgets.DateInput(attrs={'type': 'date'}), initial=datetime.date.today())
 
     class Meta:

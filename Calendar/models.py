@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from multiselectfield import MultiSelectField
 
 from django.db import models
 
@@ -38,7 +39,7 @@ class Day(models.Model):
         choices=MOOD_CHOICES,
     )
     notes = models.CharField(max_length=500)
-    emotions = models.CharField(
+    emotions = MultiSelectField(
         max_length=2,
         choices=EMOTION_CHOICES
     )
