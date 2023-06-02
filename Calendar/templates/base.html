@@ -3,8 +3,9 @@
 <head>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Londrina+Shadow&family=Macondo&family=Quicksand&family=Vast+Shadow&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Londrina+Shadow&family=Macondo&family=Quicksand&family=Vast+Shadow&family=Libre+Baskerville&family=Prompt:wght@400&family=Mountains+of+Christmas&display=swap" rel="stylesheet">
   <meta charset="utf-8">
+
   <title>{% block title %}Base{% endblock %}</title>
 
   <style>
@@ -14,7 +15,7 @@
     }
 
 html,body{
-    margin:0;
+    margin:0px;
     height:100%;
 }
 img.img1{
@@ -47,21 +48,22 @@ div.big {
       justify-content: center;
       height: 100%;
       width: 100%;
-      font-size: 16rem;
-      font-family: 'Macondo', cursive;
+      font-size: 17rem;
+      font-family: 'Libre Baskerville', serif;
       position: absolute;
       color: #ffffff;
     }
+
 
 div.link {
       display: flex;
       align-items: center;
       justify-content: right;
       padding-right: 16px;
-      font-size: 2rem;
-      
-      font-family: 'Macondo', cursive;
+      font-size: 1.3rem;
+      font-family: 'Prompt', sans-serif;
       color: #ffffff;
+      display: inline;
     }
 
 .link > a{
@@ -71,12 +73,22 @@ div.link {
 div.p {
       display: flex;
       align-items: center;
-      justify-content: left;
+      justify-content: center;
       padding-right: 20px;
       padding-left: 20px;
-      font-size: 2rem;
-      font-family: 'Macondo', cursive;
+      font-size: 1.3rem;
+      font-family: 'Prompt', sans-serif;
     }
+
+div.p2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 1rem;
+    font-family: 'Prompt', sans-serif;
+  }
 
 table {
   width: 100%;
@@ -85,17 +97,16 @@ table {
 a.button {
     color: #000000;
     text-decoration: none;
-    padding: 10px;
+    padding: 30px;
     border: 2px solid #c8c1c3;
-    border-radius: 3px;
+    border-radius: 0px;
     background-color: #fff;
     transition: all .3s;
     -webkit-transition: all .3s; /* safari */
     -moz-transition: all .3s; /* mozilla */
     -ms-transition: all .3s; /* IE */
     -o-transition: all .3s; /* opera */
-    padding: 30px;
-  
+    font-family: 'Prompt', sans-serif;
 }
 
 a.button:hover,
@@ -119,6 +130,8 @@ a.button:active {
   position: absolute;
   bottom: 36px;
   left: 40px;
+  font-size: 1.3rem;
+  font-family: 'Prompt', sans-serif;
 }
 
 /* Top left text */
@@ -126,6 +139,8 @@ a.button:active {
   position: absolute;
   top: 36px;
   left: 40px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 1.3rem;
 }
 
 /* Top right text */
@@ -133,6 +148,8 @@ a.button:active {
   position: absolute;
   top:36px;
   right: 40px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 1.3rem;
 }
 
 /* Bottom right text */
@@ -140,6 +157,8 @@ a.button:active {
   position: absolute;
   bottom: 36px;
   right: 40px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 1.3rem;
 }
 
 /* Centered text */
@@ -148,10 +167,37 @@ a.button:active {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  font-size: 16rem;
-  font-family: 'Macondo', cursive;
+  font-size: 10rem;
+  font-family: 'Mountains of Christmas', cursive;
 } 
 
+.below_centered {
+  position: absolute;
+  top: 70%;
+  left: 57%;
+  transform: translate(-70%, -70%);
+  font-size: 1rem;
+  font-family: 'Prompt', sans-serif;
+} 
+
+login {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  font-size: 1.3rem;
+  font-family: 'Libre Baskerville', serif;
+  color: #ffffff;
+}
+
+/* calendar stuf */
+
+.calendar_box {
+  margin:20px;
+  position: relative;
+
+}
 
   </style>
 </head>

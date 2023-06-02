@@ -3,10 +3,18 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-<h2>Log In</h2>
-<form method="post">
+
+<div class="container">
+  <img src="https://www.thisiscolossal.com/wp-content/uploads/2020/09/ghibli-9-960x519@2x.jpg" alt="">
+  <div class="centered">
+    <login>Log In</login>
+<login><form method="post">
   {% csrf_token %}
   {{ form.as_p }}
   <button type="submit">Log In</button>
-</form>
+  <button type="submit"><a href="{% url 'signup' %}">Sign Up</button></div>
+
+</form></login>
+  </div>
+  
 {% endblock %}

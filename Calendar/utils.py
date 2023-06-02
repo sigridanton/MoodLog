@@ -55,7 +55,7 @@ class Calendar(HTMLCalendar):
         """
         Return a weekday name as a table header.
         """
-        return '<th class="%s"><div class="p">%s</div></th>' % (
+        return '<th class="%s"><div class="p2">%s</div></th>' % (
             self.cssclasses_weekday_head[day], day_abbr[day])
 
     def formatweekheader(self):
@@ -73,7 +73,7 @@ class Calendar(HTMLCalendar):
             s = '%s %s' % (month_name[themonth], theyear)
         else:
             s = '%s' % month_name[themonth]
-        return '<tr><th colspan="7" class="%s"><h2>%s</h2></th></tr>' % (
+        return '<tr><th colspan="7" class="%s"><div class="p">%s</div></th></tr>' % (
             self.cssclass_month_head, s)
     
     def formatmonth(self, theyear, themonth, withyear=True):
