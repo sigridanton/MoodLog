@@ -8,9 +8,23 @@
   <img class="img1" src="https://www.thisiscolossal.com/wp-content/uploads/2020/09/ghibli-9-960x519@2x.jpg" alt="">
   <div class="bottom-left"></div>
   <div class="top-left">
-    {% if user.is_authenticated %}
-    <div class="p">Hi, {{ user.username }}!</div>
-    {% endif %}
+    <div class="big">MoodLog</div>
+    <br><br><br><br>
+    <div class="p1">The Best Website <br> for recording <br> your Mood</div>
+    <div class="p3">Just click a few buttons!
+      <br><br><br>
+      How did your day go?
+    </div>
+    <br>
+    <div class="container">
+      <a href="review" class="button">1</a>
+      <a href="review" class="button">2</a>
+      <a href="review" class="button">3</a>
+      <a href="review" class="button">4</a>
+      <a href="review" class="button">5</a>
+      <a href="review" class="button">6</a>
+      <a href="review" class="button">7</a>
+  </div>
   </div>
   <div class="top-right">
     {% if user.is_authenticated %}
@@ -21,31 +35,16 @@
     {% endif %}
   </div>
   <div class="bottom-right"></div>
-  <div class="centered">MoodLog</div>
-  <div class="below_centered">
-    MoodLog is a website where you can record your mood and feelings!
-    <br>
-    Just click a few buttons!
-  </div>
+  <div class="centered"></div>
+  <div class="below_centered"></div>
 </div> 
 
 <br><br><br><br><br><br><br>
 
-<div class="p">How did your day go?</div>
-<br><br><br>
-    <div class="container">
-        <a href="review" class="button">1</a>
-        <a href="review" class="button">2</a>
-        <a href="review" class="button">3</a>
-        <a href="review" class="button">4</a>
-        <a href="review" class="button">5</a>
-        <a href="review" class="button">6</a>
-        <a href="review" class="button">7</a>
-    </div>
-    <div class="calendar_box">
-      {{ calendar | safe }}
-    </div>
 
+<div class="calendar_box">
+  {{ calendar | safe }}
+</div>
 <br><br><br><br><br><br>
 
 {% endblock %}
