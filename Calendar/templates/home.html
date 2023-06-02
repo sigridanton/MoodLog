@@ -5,7 +5,7 @@
 {% block content %}
 
 <div class="container">
-  <img src="https://www.thisiscolossal.com/wp-content/uploads/2020/09/ghibli-9-960x519@2x.jpg" alt="">
+  <img class="img1" src="https://www.thisiscolossal.com/wp-content/uploads/2020/09/ghibli-9-960x519@2x.jpg" alt="">
   <div class="bottom-left"></div>
   <div class="top-left">
     {% if user.is_authenticated %}
@@ -42,7 +42,6 @@
         <a href="review" class="button">6</a>
         <a href="review" class="button">7</a>
     </div>
-<br><br><br><br><br><br>
     <div class="calendar_box">
       {{ calendar | safe }}
     </div>

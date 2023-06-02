@@ -41,8 +41,13 @@ class Calendar(HTMLCalendar):
             color = "white"
 
         #<img src="%s" width = "100" height = "auto" alt="">
+
+        if day == 0:
+            num = ""
+        else:
+            num = str(day)
         
-        return '<td class="%s" bgcolor="%s">%d</td>' % (self.cssclasses[weekday], color, day)
+        return '<td height="70px" class="%s" bgcolor="%s">%s</td>' % (self.cssclasses[weekday], color, num)
     
     def formatweek(self, theweek):
         """
@@ -86,7 +91,7 @@ class Calendar(HTMLCalendar):
         month = themonth
         v = []
         a = v.append
-        a('<table border="1" cellpadding="20" cellspacing="0" class="%s">' % (
+        a('<table border="0" cellpadding="20" cellspacing="0" class="%s">' % (
             self.cssclass_month))
         a('\n')
         a(self.formatmonthname(theyear, themonth, withyear=withyear))
