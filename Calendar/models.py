@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from django.conf import settings
 from multiselectfield import MultiSelectField
 
 from django.db import models
@@ -44,3 +45,9 @@ class Day(models.Model):
         choices=EMOTION_CHOICES
     )
     date = models.DateField()
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )

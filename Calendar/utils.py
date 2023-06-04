@@ -16,12 +16,12 @@ class Calendar(HTMLCalendar):
     def __init__(self, firstweekday: int = 0) -> None:
         super().__init__(firstweekday)
 
-    def formatday(self, day: int, weekday: int) -> str:
-        if day == 0:
+    def formatday(self, day: int, weekday: int, user) -> str:
+        if day == 0 or user == None:
             mood = 0
         else:
             try:
-                days = Day.objects.all().filter(date = datetime.date(year, month, day))
+                days = Day.objects.all().filter(user = user).filter(date = datetime.date(year, month, day))
                 mood = days[len(days)-1].mood
             except:
                 mood = 0
@@ -54,11 +54,11 @@ class Calendar(HTMLCalendar):
         
         return '<td class="%s" bgcolor="%s"><button class="daybt" type="submit" name="%s">%s</td>' % (self.cssclasses[weekday], color, num, num)
     
-    def formatweek(self, theweek):
+    def formatweek(self, theweek, user):
         """
         Return a complete week as a table row.
         """
-        s = ''.join(self.formatday(d, wd) for (d, wd) in theweek)
+        s = ''.join(self.formatday(d, wd, user) for (d, wd) in theweek)
         return '<tr>%s</tr>' % s
     
     def formatweekday(self, day):
@@ -86,7 +86,7 @@ class Calendar(HTMLCalendar):
         return '<tr><th colspan="7" class="%s"><div class="p">%s</div></th></tr>' % (
             self.cssclass_month_head, s)
     
-    def formatmonth(self, theyear, themonth, withyear=True):
+    def formatmonth(self, theyear, themonth, user, withyear=True):
         """
         Return a formatted month as a table.
         """
@@ -104,7 +104,7 @@ class Calendar(HTMLCalendar):
         a(self.formatweekheader())
         a('\n')
         for week in self.monthdays2calendar(theyear, themonth):
-            a(self.formatweek(week))
+            a(self.formatweek(week, user))
             a('\n')
         a('</table>')
         a('\n')

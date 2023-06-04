@@ -45,6 +45,7 @@ class DayForm(forms.ModelForm):
 
     class Meta:
         fields = ['mood', 'notes', 'emotions', 'date']
+        exclude = ['user']
         model = Day
         widgets = {
             'date': forms.widgets.DateInput(attrs={'type': 'date'})
