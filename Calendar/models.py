@@ -41,7 +41,7 @@ class Day(models.Model):
     )
     notes = models.CharField(max_length=500)
     emotions = MultiSelectField(
-        max_length=2,
+        max_length=100,
         choices=EMOTION_CHOICES
     )
     date = models.DateField()

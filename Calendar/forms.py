@@ -33,15 +33,26 @@ class DayForm(forms.ModelForm):
         ("13", "Anxious"),
         ("14", "Lonely"),
     ]
-    #mood = forms.ChoiceField(
-    #    widget=forms.RadioSelect,
-    #    choices=CHOICES,
-    #)
 
-    mood = forms.CharField(label='Mood', widget=forms.RadioSelect(choices=MOOD_CHOICES))
-    notes = forms.CharField(label="Notes")
-    emotions = forms.MultipleChoiceField(label='Mood', choices=EMOTION_CHOICES)
-    date = forms.DateField(widget=forms.widgets.DateInput(attrs={'type': 'date'}), initial=datetime.date.today())
+    mood = forms.CharField(
+        label='Mood', 
+        widget=forms.RadioSelect(choices=MOOD_CHOICES)
+    )
+
+    notes = forms.CharField(
+        label="Notes", 
+        required=False,
+    )
+    emotions = forms.MultipleChoiceField(
+        label='Mood', 
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+        choices=EMOTION_CHOICES,
+    )
+    date = forms.DateField(
+        widget=forms.widgets.DateInput(attrs={'type': 'date'}), 
+        initial=datetime.date.today()
+    )
 
     class Meta:
         fields = ['mood', 'notes', 'emotions', 'date']

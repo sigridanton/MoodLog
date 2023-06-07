@@ -55,7 +55,9 @@ def review(request):
         current = None
     if request.method == "POST":
         form = DayForm(request.POST)
+        print(form)
         if form.is_valid():
+            print("valid")
             review = form.save(commit=False)
             review.user = request.user
             review.save()
