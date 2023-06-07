@@ -42,7 +42,7 @@
         <a href="review" class="button">6</a>
         <a href="review" class="button">7</a>
     </div>
-    <div class="calendar_box">
+    <div class="calendar_box" id="calendar">
       <form method="post" action="/">
         {% csrf_token %}
         {{ form.as_p }}

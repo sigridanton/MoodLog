@@ -21,6 +21,9 @@ from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 from Calendar.views import SignUpView
+from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -30,4 +33,8 @@ urlpatterns = [
     #path("accounts/", include("accounts.urls")),
     path("signup/", SignUpView.as_view(), name="signup"),
     path('review/', views.review, name='review'),
+    path('stats/', views.stats, name='stats')
 ]
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

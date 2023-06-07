@@ -83,8 +83,10 @@ class Calendar(HTMLCalendar):
             s = '%s %s' % (month_name[themonth], theyear)
         else:
             s = '%s' % month_name[themonth]
-        return '<tr><th colspan="7" class="%s"><div class="p">%s</div></th></tr>' % (
-            self.cssclass_month_head, s)
+        prevbt = '<button type="submit" name="previous" class="previous">Previous</button>'
+        nextbt = '<button type="submit" name="next" class="next">Next</button>'
+        currentbt = '<button type="submit" name="current" class="current">Current</button>'
+        return '<tr><th colspan="7" class="%s"><div class="p">%s%s%s</div>%s</th></tr>' % (self.cssclass_month_head, prevbt, s, nextbt, currentbt)
     
     def formatmonth(self, theyear, themonth, user, withyear=True):
         """

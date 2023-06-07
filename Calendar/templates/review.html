@@ -8,8 +8,15 @@
 <form method="post" action="/review/">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Done</button>
+    <button type="submit" name="review">Done</button>
 </form>
-
+<hr>
+<div class="calendar_box" id="calendar">
+    <form method="post" action="/review/">
+      {% csrf_token %}
+      {{ calform.as_p }}
+      {{ calendar | safe }}
+    </form>
+</div>
 
 {% endblock %}

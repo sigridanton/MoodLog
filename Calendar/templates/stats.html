@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<div class="calendar_box" id="calendar">
+    <form method="post" action="/stats/">
+      {% csrf_token %}
+      {{ calform.as_p }}
+      {{ calendar | safe }}
+    </form>
+</div>
+<hr>
+<img src="C:\Users\Rain Laurimaa\Docs\Django\MoodLog\static\media\mood.png" alt="fuck"></img>
+
+{% endblock %}

@@ -4,7 +4,15 @@ from multiselectfield import MultiSelectField
 
 from django.db import models
 
-# Create your models here.
+class Month(models.Model):
+    month = models.PositiveSmallIntegerField(null=True)
+    year = models.PositiveIntegerField(null=True)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
 
 class Day(models.Model):
     MOOD_CHOICES = [
@@ -49,5 +57,10 @@ class Day(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         blank=True,
+        null=True,
+    )
+    month = models.ForeignKey(
+        Month, 
+        on_delete=models.CASCADE,
         null=True,
     )
