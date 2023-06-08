@@ -1,9 +1,11 @@
 import calendar
 import datetime
+import os
 import matplotlib
 import numpy
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
+from calendar import HTMLCalendar, monthrange
 
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -11,18 +13,17 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django import forms
-from Calendar.forms import ButtonForm, DayForm
-from calendar import HTMLCalendar, monthrange
-from Calendar.models import Day, Month
 from django.contrib.auth.decorators import login_required
 
+from Calendar.forms import ButtonForm, DayForm
+from Calendar.models import Day, Month
 from Calendar.utils import Calendar
 
 # track dates
 state = {
     "cal_date": datetime.date.today(),
     "review_date": datetime.date.today(),
-    "stat_type": "monthly",
+    "stat_type": "monthly", # 'monthly' or 'yearly'
 }
 
 class SignUpView(generic.CreateView):
@@ -182,10 +183,19 @@ def stats(request):
         if request.POST.get("current") == "":
             state["cal_date"] = datetime.date.today()
             return redirect("/stats/#calendar")
+        
         for day in range(1, 32):
             if request.POST.get(str(day)) == "":
                 state["review_date"] = datetime.date(state["cal_date"].year, state["cal_date"].month, day)
                 return redirect('/review/')
+        
+        if request.POST.get("monthly") == "":
+            state["stat_type"] = "monthly"
+            return redirect("/stats/#stats")
+        
+        if request.POST.get("yearly") == "":
+            state["stat_type"] = "yearly"
+            return redirect("/stats/#stats")
     
     try:
         user = request.user
@@ -199,29 +209,39 @@ def stats(request):
     stat_type = state["stat_type"]
 
     if stat_type == "monthly":
-        # axes = []
         days = Day.objects.all().filter(user = user).filter(date__year=year).filter(date__month=month)
-        # for day in days:
-        #     axes.append((int(day.date.day), int(day.mood)))
         axes = {int(day.date.day): int(day.mood) for day in days}
         
-        #moods = [x[1] for x in axes]
-        dates = numpy.array([x for x in range(1, monthrange(year, month)[1]+1)])
+        dates = numpy.array(range(1, monthrange(year, month)[1]+1))
         moods = numpy.array([axes[day] if day in axes else None for day in dates])
         moods = numpy.ma.masked_where(moods == None, moods)
-
-        # arr_none = numpy.array([None])
-        # mask = (moods != None)
-        # moods = []
-        # for day in dates:
-        #     if day 
-
-        print(moods)
-        print(dates)
 
         plt.plot(dates, moods, 'o-')
         plt.xticks(dates)
         plt.yticks(range(1, 8))
         plt.savefig('static/Calendar/mood.png')
+        plt.figure().clear()
+
+    if stat_type == "yearly":
+        days = Day.objects.all().filter(user = user).filter(date__year=year)
+        month_ratings = {}
+        for m in range(1, 13):
+            month_days = days.filter(date__month=m)
+            try:
+                avg = float(numpy.average([int(day.mood) for day in month_days if int(day.mood)]))
+            except:
+                avg = None
+            month_ratings[m] = avg
+        
+        x = numpy.array(range(1, 13))
+        y = [month_ratings[m] for m in range(1, 13)]
+        y = numpy.ma.masked_where(y == None, y)
+        print(y)
+
+        plt.plot(x, y, 'o-')
+        plt.xticks(x)
+        plt.yticks(range(1, 8))
+        plt.savefig('static/Calendar/mood.png')
+        plt.figure().clear()
 
     return render(request, "stats.html", context)
