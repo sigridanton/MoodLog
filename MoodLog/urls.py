@@ -33,7 +33,7 @@ urlpatterns = [
     #path("accounts/", include("accounts.urls")),
     path("signup/", SignUpView.as_view(), name="signup"),
     path('review/', views.review, name='review'),
-    path('stats/', views.stats, name='stats')
+    path('stats/', views.stats, name='stats'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

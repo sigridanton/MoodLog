@@ -1,14 +1,18 @@
 import calendar
 import datetime
+import matplotlib
+import numpy
+matplotlib.use('Agg')
+from matplotlib import pyplot as plt
+
 from django.shortcuts import redirect, render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse, reverse_lazy
 from django.views import generic
 from django import forms
-import matplotlib.pyplot as plt
 from Calendar.forms import ButtonForm, DayForm
-from calendar import HTMLCalendar
+from calendar import HTMLCalendar, monthrange
 from Calendar.models import Day, Month
 from django.contrib.auth.decorators import login_required
 
@@ -91,8 +95,7 @@ def review(request):
                 review.month = Month.objects.create(month=state["review_date"].month, year=state["review_date"].year, user=request.user)
 
             # delete duplicates
-            others = Day.objects.filter(date = review.date)
-            [x.delete() for x in others[1:(len(others)-1)]]
+            Day.objects.filter(date = review.date).delete()
             print(Day.objects.all())
 
             review.save()
@@ -182,7 +185,7 @@ def stats(request):
         for day in range(1, 32):
             if request.POST.get(str(day)) == "":
                 state["review_date"] = datetime.date(state["cal_date"].year, state["cal_date"].month, day)
-                return redirect('/stats/#calendar')
+                return redirect('/review/')
     
     try:
         user = request.user
@@ -196,17 +199,29 @@ def stats(request):
     stat_type = state["stat_type"]
 
     if stat_type == "monthly":
-        axes = []
+        # axes = []
         days = Day.objects.all().filter(user = user).filter(date__year=year).filter(date__month=month)
-        for day in days:
-            axes.append((int(day.date.day), int(day.mood)))
+        # for day in days:
+        #     axes.append((int(day.date.day), int(day.mood)))
+        axes = {int(day.date.day): int(day.mood) for day in days}
         
-        moods = [x[1] for x in axes]
-        days = [x[0] for x in axes]
+        #moods = [x[1] for x in axes]
+        dates = numpy.array([x for x in range(1, monthrange(year, month)[1]+1)])
+        moods = numpy.array([axes[day] if day in axes else None for day in dates])
+        moods = numpy.ma.masked_where(moods == None, moods)
 
-        plt.plot(days, moods)
-        plt.savefig('static/media/mood.png')
+        # arr_none = numpy.array([None])
+        # mask = (moods != None)
+        # moods = []
+        # for day in dates:
+        #     if day 
 
-        #context["mood_graph"] = 
+        print(moods)
+        print(dates)
+
+        plt.plot(dates, moods, 'o-')
+        plt.xticks(dates)
+        plt.yticks(range(1, 8))
+        plt.savefig('static/Calendar/mood.png')
 
     return render(request, "stats.html", context)
