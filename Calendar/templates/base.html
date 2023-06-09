@@ -28,22 +28,21 @@ img.img1{
 }
 
 
-    img.duck{
-      width:40px;
-      height: 30px;
-    }
+img.duck{
+  width:40px;
+  height: 30px;
+}
 
-    div.duck {  
-    width: 100px;  
-    height: auto;  
-    text-align: center;  
-    padding: 0px;  
-    border: 3px solid red;  
-    }  
-
-    img.duck {  
-    object-fit: cover;  
-    }  
+div.duck {  
+width: 100px;  
+height: auto;  
+text-align: center;  
+padding: 0px;  
+border: 3px solid red;  
+}  
+img.duck {  
+object-fit: cover;  
+}  
 
 div.big {
     position: absolute;
@@ -56,7 +55,7 @@ div.big {
 }
 
 
-    div.link {
+div.link {
       display: flex;
       align-items: center;
       justify-content: right;
@@ -67,11 +66,11 @@ div.big {
       display: inline;
     }
 
-    .link > a{
+.link > a{
       color: rgb(255, 255, 255);
     }
 
-    div.p {
+div.p {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -95,15 +94,15 @@ div.p1 {
       font-family: 'Lora', serif;
 }
 
-    div.p2 {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding-right: 20px;
-      padding-left: 20px;
-      font-size: 1rem;
-      font-family: 'Prompt', sans-serif;
-    }
+div.p2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-right: 20px;
+    padding-left: 20px;
+    font-size: 1rem;
+    font-family: 'Prompt', sans-serif;
+  }
 
   div.p3 {
     display: flex;
@@ -244,9 +243,13 @@ login {
 
 .calendar_box {
   position: relative;
-  margin-top: 100px;
-  margin-right: 320px;
-  margin-left: 320px;
+  margin-top: auto;
+  width: 70%;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* button for days in calendar */
@@ -263,6 +266,7 @@ login {
   background-color: transparent;
   vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
   justify-content: left;
+  margin-right: 50px;
 }
 
 /* button for 'next' in calendar */
@@ -270,13 +274,35 @@ login {
   background-color: transparent;
   vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
   justify-content: right;
+  margin-left: 50px;
 }
 
 /* button for 'current' in calendar */
 .current {
+  margin-top: 10px;
   background-color: transparent;
 }
 
+p.form {
+  font-size: 1rem;
+  font-family: 'Prompt', sans-serif;
+
+}
+
+.stats {
+  position: relative;
+  margin-left: 40rem;
+  margin-right: auto;
+}
+
+.stats_button {
+  position: relative;
+  left: 70%;
+  background-color: transparent;
+  vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
+  justify-content: right;
+  align-items: right;
+}
   </style>
 </head>
 <body>

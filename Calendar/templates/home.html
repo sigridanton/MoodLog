@@ -39,29 +39,34 @@
   <div class="below_centered"></div>
 </div> 
 
-<br><br><br><br><br><br><br>
-
-
-<div class="calendar_box" id="calendar">
+<br><br><br>
+{% if user.is_authenticated %}
+  <div class="calendar_box" id="calendar">
       <form method="post" action="/">
         {% csrf_token %}
         {{ form.as_p }}
     {{ calendar | safe }}
       </form>
 </div>
+<br><br><br>
+<hr>
+<br><br><br>
+
   <div class="container" id="stats">
     <form method="post" action="/">
       {% csrf_token %}
-      <button type="submit" name="monthly">Monthly</button>
-      <button type="submit" name="yearly">Yearly</button>
+      <button type="submit" name="monthly" class="stats_button">Monthly</button>
+      <button type="submit" name="yearly" class="stats_button">Yearly</button>
       <br>
       {% if stat_type == "yearly" %}
-      <button type="submit" name="prevyear">Previous</button>
-      <button type="submit" name="nextyear">Next</button>
+      <button type="submit" name="prevyear" class="stats_button">Previous</button>
+      <button type="submit" name="nextyear" class="stats_button">Next</button>
       {% endif %}
     </form>
   </div>
-  <img src="{% static 'Calendar/mood.png' %}" alt="fuck">
+  <div class="stats">{{ stats | safe }}</div>
+
+{% endif %}
 
 <br><br><br><br><br><br>
 

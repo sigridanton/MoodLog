@@ -59,7 +59,7 @@ class DayForm(forms.ModelForm):
         exclude = ['user', 'month']
         model = Day
         widgets = {
-            'date': forms.widgets.DateInput(attrs={'type': 'date'})
+            'date': forms.widgets.DateInput(attrs={'type': 'date'}),
         }
 
     def get(self, request):

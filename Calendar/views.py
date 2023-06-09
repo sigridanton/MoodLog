@@ -1,7 +1,11 @@
+import base64
 import calendar
 import datetime
+from io import BytesIO
+from multiprocessing.managers import BaseManager
 import os
 import matplotlib
+from matplotlib.transforms import Bbox
 import numpy
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
@@ -82,21 +86,35 @@ def home(request):
     stat_type = state["stat_type"]
 
     if stat_type == "monthly":
-        days = Day.objects.all().filter(user = user).filter(date__year=year).filter(date__month=month)
+        try:
+            days = Day.objects.all().filter(user = user).filter(date__year=year).filter(date__month=month)
+        except:
+            days = []
         axes = {int(day.date.day): int(day.mood) for day in days}
         
         dates = numpy.array(range(1, monthrange(year, month)[1]+1))
         moods = numpy.array([axes[day] if day in axes else None for day in dates])
         moods = numpy.ma.masked_where(moods == None, moods)
 
+        plt.figure(figsize=(10,5))
         plt.plot(dates, moods, 'o-')
         plt.xticks(dates)
         plt.yticks(range(1, 8))
-        plt.savefig('static/Calendar/mood.png')
+
+        tmpfile = BytesIO()
+        plt.savefig(tmpfile, format='png', bbox_inches='tight')
+        encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
+
+        context["stats"] = '<img src=\'data:image/png;base64,{}\' alt="fuck">'.format(encoded)
+        
         plt.figure().clear()
 
     if stat_type == "yearly":
-        days = Day.objects.all().filter(user = user).filter(date__year=year)
+        #days = Day.objects.all().filter(user = user).filter(date__year=year)
+        try:
+            days = Day.objects.all().filter(user = user).filter(date__year=year)
+        except:
+            days = Day.objects.none()
         month_ratings = {}
         for m in range(1, 13):
             month_days = days.filter(date__month=m)
@@ -114,7 +132,13 @@ def home(request):
         plt.plot(x, y, 'o-')
         plt.xticks(x)
         plt.yticks(range(1, 8))
-        plt.savefig('static/Calendar/mood.png')
+
+        tmpfile = BytesIO()
+        plt.savefig(tmpfile, format='png')
+        encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
+
+        context["stats"] = '<img src=\'data:image/png;base64,{}\' alt="fuck">'.format(encoded)
+
         plt.figure().clear()
     
     context["stat_type"] = stat_type

@@ -3,23 +3,29 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<body style="background-color:#88a487;">
 
-<div class="centered">
-    <div class="p1">How did your <br> day go?</div>
-
-<form method="post" action="/review/">
+      <login>How did your day go?</login>
+  <login><form method="post" action="/review/">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" name="review">Done</button>
-</form>
-<hr>
-<div class="calendar_box" id="calendar">
-    <form method="post" action="/review/">
-      {% csrf_token %}
-      {{ calform.as_p }}
-      {{ calendar | safe }}
-    </form>
-</div>
+    {% for field in form %}
+        <div class="container">
+            {{ field.errors }}
+            {{ field.label_tag }} <div class="form">{{ field }}</div>
+            {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+
+    <button type="submit" name="review">Done</button>  
+  </form></login>
+
+    <div class="calendar_box" id="calendar">
+        <form method="post" action="/review/">
+          {% csrf_token %}
+          {{ calform.as_p }}
+          {{ calendar | safe }}
+        </form>
+    </div>
 
 {% endblock %}

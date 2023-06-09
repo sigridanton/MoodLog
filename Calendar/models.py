@@ -64,3 +64,12 @@ class Day(models.Model):
         on_delete=models.CASCADE,
         null=True,
     )
+
+class Stats(models.Model):
+    image = models.ImageField()
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
