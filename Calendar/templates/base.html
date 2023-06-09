@@ -3,28 +3,29 @@
 <head>
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Londrina+Shadow&family=Macondo&family=Quicksand&family=Vast+Shadow&family=Libre+Baskerville&family=Prompt:wght@400&family=Mountains+of+Christmas&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Londrina+Shadow&family=Macondo&family=Quicksand&family=Vast+Shadow&family=Libre+Baskerville&family=Prompt:wght@400&family=Mountains+of+Christmas&family=Lora&family=Yeseva+One&display=swap" rel="stylesheet">
   <meta charset="utf-8">
 
   <title>{% block title %}Base{% endblock %}</title>
 
   <style>
 
-    td.bg-one {
-      background: #FF5733;
+td.bg-one {
+      background: #f0d1ba;
     }
 
-    html,body{
-        margin:0px;
-        height:100%;
-    }
+html,body{
+    margin:0px;
+    height:100%;
+    background-color: rgb(202, 213, 190);
+}
 
-    img.img1{
-      display:block;
-      width:100%; 
-      height:100%;
-      object-fit: cover;
-    }
+img.img1{
+  display:block;
+  width:100%; 
+  height:100%;
+  object-fit: cover;
+}
 
 
     img.duck{
@@ -44,17 +45,15 @@
     object-fit: cover;  
     }  
 
-    div.big {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100%;
-      width: 100%;
-      font-size: 17rem;
-      font-family: 'Libre Baskerville', serif;
-      position: absolute;
-      color: #ffffff;
-    }
+div.big {
+    position: absolute;
+    top: 20px;
+    left: 75px;;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-family: 'Mountains of Christmas', cursive;
+    color: #ffffff;
+}
 
 
     div.link {
@@ -80,7 +79,21 @@
       padding-left: 20px;
       font-size: 1.3rem;
       font-family: 'Prompt', sans-serif;
-    }
+      color: #fff;
+}
+
+
+div.p1 {
+      display: flex;
+      align-items: left;
+      justify-content: left;
+      text-align: left;
+      padding-right: 20px;
+      padding-left: 0px;
+      font-size: 5rem;
+      color:#ffffff;
+      font-family: 'Lora', serif;
+}
 
     div.p2 {
       display: flex;
@@ -92,29 +105,45 @@
       font-family: 'Prompt', sans-serif;
     }
 
-    table {
-      width: 100%;
-    }
+  div.p3 {
+    display: flex;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+    padding-right: 20px;
+    padding-left: 0px;
+    font-size: 1rem;
+    font-family: 'Prompt', sans-serif;
+  }
 
-    a.button {
-      color: #000000;
-      text-decoration: none;
-      padding: 30px;
-      border: 2px solid #c8c1c3;
-      border-radius: 0px;
-      background-color: #fff;
-      transition: all .3s;
-      -webkit-transition: all .3s; /* safari */
-      -moz-transition: all .3s; /* mozilla */
-      -ms-transition: all .3s; /* IE */
-      -o-transition: all .3s; /* opera */
-      font-family: 'Prompt', sans-serif;
-    }
+table {
+  width: 100%;
+}
+
+a.button {
+    color: #000000;
+    text-decoration: none;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top:10px;
+    padding-bottom:10px;
+    border: 2px solid #c8c1c3;
+    margin: 1px;
+    border-radius:40px;
+    background-color: rgb(255, 255, 255);
+    transition: all .3s;
+    -webkit-transition: all .3s; /* safari */
+    -moz-transition: all .3s; /* mozilla */
+    -ms-transition: all .3s; /* IE */
+    -o-transition: all .3s; /* opera */
+    font-family: 'Prompt', sans-serif;
+}
 
 a.button:hover,
 a.button:focus,
 a.button:active {
-    background-color: #5a9e57;
+  
+    background-color: #87b684;
     color: #fff;
 }
 
@@ -123,7 +152,7 @@ a.button:active {
  /* Container holding the image and the text */
  .container {
   position: relative;
-  text-align: center;
+  text-align: left;
   height: 100%;
   width: auto;
   color: white;
@@ -142,7 +171,15 @@ a.button:active {
 .top-left {
   position: absolute;
   top: 36px;
-  left: 40px;
+  left: 30px;
+  font-family: 'Prompt', sans-serif;
+  font-size: 1.3rem;
+}
+
+.top-left1 {
+  position: absolute;
+  top: 36px;
+  left: 80px;
   font-family: 'Prompt', sans-serif;
   font-size: 1.3rem;
 }
@@ -189,10 +226,18 @@ login {
   align-items: center;
   justify-content: center;
   height: 100%;
-  width: 100%;
-  font-size: 1.3rem;
-  font-family: 'Libre Baskerville', serif;
+  max-width: 900px;
+  font-size: 1rem;
+  font-family: 'Prompt', sans-serif;
   color: #ffffff;
+  margin: 20px auto;
+  padding-left: 50px;
+  padding-right: 50px;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  border-radius: 5px;
+  background-color: rgb(151, 167, 134);
+  box-shadow: 10px 10px rgb(100, 114, 86);
 }
 
 /* calendar stuf */

@@ -3,7 +3,10 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="p">How did your day go?</div>
+<body style="background-color:#88a487;">
+
+<div class="centered">
+    <div class="p1">How did your <br> day go?</div>
 
 <form method="post" action="/review/">
     {% csrf_token %}
