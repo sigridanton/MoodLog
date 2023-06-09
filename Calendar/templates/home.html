@@ -50,6 +50,20 @@
       </form>
     </div>
 
+  <div class="container" id="stats">
+    <form method="post" action="/">
+      {% csrf_token %}
+      <button type="submit" name="monthly">Monthly</button>
+      <button type="submit" name="yearly">Yearly</button>
+      <br>
+      {% if stat_type == "yearly" %}
+      <button type="submit" name="prevyear">Previous</button>
+      <button type="submit" name="nextyear">Next</button>
+      {% endif %}
+    </form>
+  </div>
+  <img src="{% static 'Calendar/mood.png' %}" alt="fuck">
+
 <br><br><br><br><br><br>
 
 {% endblock %}
