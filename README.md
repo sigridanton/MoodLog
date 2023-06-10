@@ -14,5 +14,5 @@ To run this app, the following dependancies must be installed with pip:
 
 To run this app:
   1. Set up the virtual environment and run `pipenv install django`
-  2. Clone the repo from git using `git clone https://github.com/sigridanton/MoodLog` or download the zip file from releases and extract into the desired directory
+  2. Clone the repo from git using `git clone https://github.com/sigridanton/MoodLog` or download the zip file "<> Code" and extract to deired directory
   3. Run the app using `python manage.py runserver`
