@@ -1,10 +1,8 @@
 import datetime
 from django import forms
 from Calendar.models import Day
+from image_uploader_widget.widgets import ImageUploaderWidget
 
-
-class ButtonForm(forms.Form):
-    pass
 
 class DayForm(forms.ModelForm):
     # mood =
@@ -44,7 +42,7 @@ class DayForm(forms.ModelForm):
         required=False,
     )
     emotions = forms.MultipleChoiceField(
-        label='Mood', 
+        label='Emotions', 
         required=False,
         widget=forms.CheckboxSelectMultiple,
         choices=EMOTION_CHOICES,
@@ -65,3 +63,4 @@ class DayForm(forms.ModelForm):
     def get(self, request):
         form = DayForm(forms.ModelForm)
         return form
+    

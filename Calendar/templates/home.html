@@ -45,7 +45,7 @@
       <form method="post" action="/">
         {% csrf_token %}
         {{ form.as_p }}
-    {{ calendar | safe }}
+        {{ calendar | safe }}
       </form>
 </div>
 <br><br><br>
@@ -58,16 +58,30 @@
       <button type="submit" name="monthly" class="stats_button">Monthly</button>
       <button type="submit" name="yearly" class="stats_button">Yearly</button>
       <br>
-      {% if stat_type == "yearly" %}
-      <button type="submit" name="prevyear" class="stats_button">Previous</button>
-      <button type="submit" name="nextyear" class="stats_button">Next</button>
-      {% endif %}
+      <button type="submit" name="statprev" class="stats_button">Previous</button>
+      <div class="stats_button">{{ stat_date }}</div>
+      <button type="submit" name="statnext" class="stats_button">Next</button>
     </form>
   </div>
   <div class="stats">{{ stats | safe }}</div>
+  <br><br><br>
 
-{% endif %}
-
-<br><br><br><br><br><br>
-
-{% endblock %}
+  {% else %}
+  <div class="html1">
+  <div class="p1_2">About us</div>
+  <br>
+  <div class="p2_big">MoodLog is a website that can help record your mood and analyze the changes happening with it.</div>
+  <br><br>
+  <div class="p2">MoodLog started as a school project but has grown into a website used by thousands every day.</div>
+  <br>
+  <div class="p2">The website was created to help people keep track of their mental health and get help when neccessary.
+    It can also be used as a form of keeping a journal or diary, hence the name Mood"Log"!
+  </div>
+  <br><br><br><br><br><br><br><br><br><br><br>
+  
+  <img src="/Calendar/mood_screenshot.png" width="900px" height="auto"/>
+  
+  </div>
+  {% endif %}
+  
+  {% endblock %}

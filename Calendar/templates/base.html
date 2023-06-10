@@ -20,6 +20,14 @@ html,body{
     background-color: rgb(202, 213, 190);
 }
 
+.html1 {
+  margin:0px;
+  height:100%;
+  background-color: rgb(202, 213, 190);
+  background: linear-gradient(to bottom, rgb(202, 213, 190) 36rem, rgb(137, 160, 113) 1rem);
+  height: 229vh;
+}
+
 img.img1{
   display:block;
   width:100%; 
@@ -94,13 +102,38 @@ div.p1 {
       font-family: 'Lora', serif;
 }
 
+div.p1_2 {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  text-align: left;
+  padding-right: 20px;
+  padding-left: 100px;
+  font-size: 5rem;
+  color:#ffffff;
+  font-family: 'Lora', serif;
+}
+
+div.p2_big {
+  display: flex;
+  align-items: left;
+  justify-content: left;
+  text-align: left;
+  padding-right: 200px;
+  padding-left: 200px;
+  font-size: 2.5rem;
+  color:#000000;
+  font-family: 'Prompt', sans-serif;
+}
+
 div.p2 {
     display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-right: 20px;
-    padding-left: 20px;
-    font-size: 1rem;
+    align-items: left;
+    justify-content: left;
+    text-align: left;
+    padding-right: 200px;
+    padding-left: 200px;
+    font-size: 1.5rem;
     font-family: 'Prompt', sans-serif;
   }
 
@@ -252,6 +285,16 @@ login {
   margin-right: auto;
 }
 
+.calendar_text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-right: 20px;
+  padding-left: 20px;
+  font-size: 1rem;
+  font-family: 'Prompt', sans-serif;
+}
+
 /* button for days in calendar */
 .daybt {
   height: 70px;
@@ -259,6 +302,7 @@ login {
   outline: none;
   background-color: transparent;
   border: none;
+
 }
 
 /* button for 'previous' in calendar */
@@ -267,6 +311,8 @@ login {
   vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
   justify-content: left;
   margin-right: 50px;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 /* button for 'next' in calendar */
@@ -275,12 +321,16 @@ login {
   vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
   justify-content: right;
   margin-left: 50px;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 /* button for 'current' in calendar */
 .current {
   margin-top: 10px;
   background-color: transparent;
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
 p.form {
@@ -291,18 +341,27 @@ p.form {
 
 .stats {
   position: relative;
-  margin-left: 40rem;
-  margin-right: auto;
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
 .stats_button {
   position: relative;
-  left: 70%;
   background-color: transparent;
   vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
-  justify-content: right;
-  align-items: right;
+  justify-content: center;
+  align-items: center;
+  color: #ffffff;
+  border-color: #ffffff;
 }
+
+.statbt_cont {
+  position: relative;
+  justify-content: center;
+
+}
+
   </style>
 </head>
 <body>

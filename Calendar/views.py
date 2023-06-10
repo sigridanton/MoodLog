@@ -19,7 +19,7 @@ from django.views import generic
 from django import forms
 from django.contrib.auth.decorators import login_required
 
-from Calendar.forms import ButtonForm, DayForm
+from Calendar.forms import DayForm
 from Calendar.models import Day, Month
 from Calendar.utils import Calendar
 
@@ -28,6 +28,7 @@ state = {
     "cal_date": datetime.date.today(),
     "review_date": datetime.date.today(),
     "stat_type": "monthly", # 'monthly' or 'yearly'
+    "stat_date": datetime.date.today()
 }
 
 class SignUpView(generic.CreateView):
@@ -67,6 +68,21 @@ def home(request):
         if request.POST.get("current") == "":
             state["cal_date"] = datetime.date.today()
             return redirect("/#calendar")
+        
+        if request.POST.get("statprev") == "":
+            if state["stat_type"] == "monthly":
+                state["stat_date"] = state["stat_date"].replace(month=(state["stat_date"].month-1))
+            else:
+                state["stat_date"] = state["stat_date"].replace(year=(state["stat_date"].year-1))
+            return redirect("/#stats")
+        
+        if request.POST.get("statnext") == "":
+            if state["stat_type"] == "monthly":
+                state["stat_date"] = state["stat_date"].replace(month=(state["stat_date"].month+1))
+            else:
+                state["stat_date"] = state["stat_date"].replace(year=(state["stat_date"].year+1))
+            return redirect("/#stats")
+        
         for day in range(1, 32):
             if request.POST.get(str(day)) == "":
                 state["review_date"] = datetime.date(state["cal_date"].year, state["cal_date"].month, day)
@@ -84,20 +100,21 @@ def home(request):
     month = state["cal_date"].month
     year = state["cal_date"].year
     stat_type = state["stat_type"]
+    stat_date = state["stat_date"]
 
     if stat_type == "monthly":
         try:
-            days = Day.objects.all().filter(user = user).filter(date__year=year).filter(date__month=month)
+            days = Day.objects.all().filter(user = user).filter(date__year=stat_date.year).filter(date__month=stat_date.month)
         except:
             days = []
         axes = {int(day.date.day): int(day.mood) for day in days}
         
-        dates = numpy.array(range(1, monthrange(year, month)[1]+1))
+        dates = numpy.array(range(1, monthrange(stat_date.year, stat_date.month)[1]+1))
         moods = numpy.array([axes[day] if day in axes else None for day in dates])
         moods = numpy.ma.masked_where(moods == None, moods)
 
         plt.figure(figsize=(10,5))
-        plt.plot(dates, moods, 'o-')
+        plt.plot(dates, moods, 'o-', color='black')
         plt.xticks(dates)
         plt.yticks(range(1, 8))
 
@@ -105,14 +122,13 @@ def home(request):
         plt.savefig(tmpfile, format='png', bbox_inches='tight')
         encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
 
-        context["stats"] = '<img src=\'data:image/png;base64,{}\' alt="fuck">'.format(encoded)
+        context["stats"] = '<img src=\'data:image/png;base64,{}\' alt="stats">'.format(encoded)
         
         plt.figure().clear()
 
     if stat_type == "yearly":
-        #days = Day.objects.all().filter(user = user).filter(date__year=year)
         try:
-            days = Day.objects.all().filter(user = user).filter(date__year=year)
+            days = Day.objects.all().filter(user = user).filter(date__year=stat_date.year)
         except:
             days = Day.objects.none()
         month_ratings = {}
@@ -127,9 +143,8 @@ def home(request):
         x = numpy.array(range(1, 13))
         y = [month_ratings[m] for m in range(1, 13)]
         y = numpy.ma.masked_where(y == None, y)
-        print(y)
 
-        plt.plot(x, y, 'o-')
+        plt.plot(x, y, 'o-', color='black')
         plt.xticks(x)
         plt.yticks(range(1, 8))
 
@@ -137,11 +152,15 @@ def home(request):
         plt.savefig(tmpfile, format='png')
         encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
 
-        context["stats"] = '<img src=\'data:image/png;base64,{}\' alt="fuck">'.format(encoded)
+        context["stats"] = '<img src=\'data:image/png;base64,{}\' alt="stats">'.format(encoded)
 
         plt.figure().clear()
     
     context["stat_type"] = stat_type
+    if stat_type == "monthly":
+        context["stat_date"] = "%s %s" % (calendar.month_abbr[stat_date.month], stat_date.year)
+    else:
+        context["stat_date"] = "%s" % (stat_date.year)
 
     return render(request, "home.html", context)
 
@@ -159,7 +178,7 @@ def review(request):
 
     # handle review form
     if request.method == "POST" and request.POST.get("review") == "":
-        form = DayForm(request.POST)
+        form = DayForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
@@ -189,7 +208,7 @@ def review(request):
                 state["cal_date"] = datetime.date(y-1, 12, 1)
             else:
                 state["cal_date"] = datetime.date(y, m-1, 1)
-            return redirect("/#calendar")
+            return redirect("/review/#calendar")
         
         # if next is clicked
         if request.POST.get("next") == "":
@@ -199,18 +218,18 @@ def review(request):
                 state["cal_date"] = datetime.date(y+1, 1, 1)
             else:
                 state["cal_date"] = datetime.date(y, m+1, 1)
-            return redirect("/#calendar")
+            return redirect("/review/#calendar")
         
         # if current is clicked
         if request.POST.get("current") == "":
             state["cal_date"] = datetime.date.today()
-            return redirect("/#calendar")
+            return redirect("/review/#calendar")
         
         # if a day is clicked
         for day in range(1, 32):
             if request.POST.get(str(day)) == "":
                 state["review_date"] = datetime.date(state["cal_date"].year, state["cal_date"].month, day)
-                return redirect("/#calendar")
+                return redirect("/review/")
     
     # if no review exist of the day
     if current == None:
@@ -233,92 +252,3 @@ def review(request):
     state["review_date"] = datetime.date.today()
 
     return render(request, "review.html", context)
-
-# @login_required(login_url='/login/')
-# def stats(request):
-#     context = {}
-
-#     if request.method == "POST":
-#         if request.POST.get("previous") == "":
-#             y = state["cal_date"].year
-#             m = state["cal_date"].month
-#             if m == 1:
-#                 state["cal_date"] = datetime.date(y-1, 12, 1)
-#             else:
-#                 state["cal_date"] = datetime.date(y, m-1, 1)
-            
-#             return redirect("/stats/#calendar")
-#         if request.POST.get("next") == "":
-#             y = state["cal_date"].year
-#             m = state["cal_date"].month
-#             if m == 12:
-#                 state["cal_date"] = datetime.date(y+1, 1, 1)
-#             else:
-#                 state["cal_date"] = datetime.date(y, m+1, 1)
-#             return redirect("/stats/#calendar")
-            
-#         if request.POST.get("current") == "":
-#             state["cal_date"] = datetime.date.today()
-#             return redirect("/stats/#calendar")
-        
-#         for day in range(1, 32):
-#             if request.POST.get(str(day)) == "":
-#                 state["review_date"] = datetime.date(state["cal_date"].year, state["cal_date"].month, day)
-#                 return redirect('/review/')
-        
-#         if request.POST.get("monthly") == "":
-#             state["stat_type"] = "monthly"
-#             return redirect("/stats/#stats")
-        
-#         if request.POST.get("yearly") == "":
-#             state["stat_type"] = "yearly"
-#             return redirect("/stats/#stats")
-    
-#     try:
-#         user = request.user
-#     except:
-#         user = None
-    
-#     context["calendar"] = Calendar(calendar.MONDAY).formatmonth(state["cal_date"].year, state["cal_date"].month, user)
-
-#     month = state["cal_date"].month
-#     year = state["cal_date"].year
-#     stat_type = state["stat_type"]
-
-#     if stat_type == "monthly":
-#         days = Day.objects.all().filter(user = user).filter(date__year=year).filter(date__month=month)
-#         axes = {int(day.date.day): int(day.mood) for day in days}
-        
-#         dates = numpy.array(range(1, monthrange(year, month)[1]+1))
-#         moods = numpy.array([axes[day] if day in axes else None for day in dates])
-#         moods = numpy.ma.masked_where(moods == None, moods)
-
-#         plt.plot(dates, moods, 'o-')
-#         plt.xticks(dates)
-#         plt.yticks(range(1, 8))
-#         plt.savefig('static/Calendar/mood.png')
-#         plt.figure().clear()
-
-#     if stat_type == "yearly":
-#         days = Day.objects.all().filter(user = user).filter(date__year=year)
-#         month_ratings = {}
-#         for m in range(1, 13):
-#             month_days = days.filter(date__month=m)
-#             try:
-#                 avg = float(numpy.average([int(day.mood) for day in month_days if int(day.mood)]))
-#             except:
-#                 avg = None
-#             month_ratings[m] = avg
-        
-#         x = numpy.array(range(1, 13))
-#         y = [month_ratings[m] for m in range(1, 13)]
-#         y = numpy.ma.masked_where(y == None, y)
-#         print(y)
-
-#         plt.plot(x, y, 'o-')
-#         plt.xticks(x)
-#         plt.yticks(range(1, 8))
-#         plt.savefig('static/Calendar/mood.png')
-#         plt.figure().clear()
-
-#     return render(request, "stats.html", context)
