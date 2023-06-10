@@ -1,35 +1,25 @@
 import base64
-import calendar
-import datetime
 from io import BytesIO
-from multiprocessing.managers import BaseManager
-import os
+
 import matplotlib
-from matplotlib.transforms import Bbox
+import calendar
 import numpy
 matplotlib.use('Agg')
 from matplotlib import pyplot as plt
-from calendar import HTMLCalendar, monthrange
+from calendar import monthrange
 
 from django.shortcuts import redirect, render
-from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
 from django.views import generic
-from django import forms
 from django.contrib.auth.decorators import login_required
 
 from Calendar.forms import DayForm
-from Calendar.models import Day, Month
-from Calendar.utils import Calendar
+from Calendar.models import Day
+from Calendar.utils import Calendar, Date, date_from_dict
 
-# track dates
-state = {
-    "cal_date": datetime.date.today(),
-    "review_date": datetime.date.today(),
-    "stat_type": "monthly", # 'monthly' or 'yearly'
-    "stat_date": datetime.date.today()
-}
+
+today = Date.today()
 
 class SignUpView(generic.CreateView):
     form_class = UserCreationForm
@@ -37,87 +27,120 @@ class SignUpView(generic.CreateView):
     template_name = "registration/signup.html"
 
 def home(request):
-    global state
+    request.session.setdefault("cal_date", today.as_dict())
+    request.session.setdefault("review_date", today.as_dict())
+    request.session.setdefault("stat_type", "monthly")
+    request.session.setdefault("stat_date", today.as_dict())
+
+    cal_date = request.session.get("cal_date")
+    stat_type = request.session.get("stat_type")
+    stat_date = request.session.get("stat_date")
+
     if request.method == "POST":
+
+        # previous calendar month
         if request.POST.get("previous") == "":
-            y = state["cal_date"].year
-            m = state["cal_date"].month
+            y = cal_date["year"]
+            m = cal_date["month"]
+
             if m == 1:
-                state["cal_date"] = datetime.date(y-1, 12, 1)
+                request.session["cal_date"] = Date(y-1, 12, 1).as_dict()
             else:
-                state["cal_date"] = datetime.date(y, m-1, 1)
+                request.session["cal_date"] = Date(y, m-1, 1).as_dict()
             
             return redirect("/#calendar")
+        
+        # next calendar month
         if request.POST.get("next") == "":
-            y = state["cal_date"].year
-            m = state["cal_date"].month
+            y = cal_date["year"]
+            m = cal_date["month"]
             if m == 12:
-                state["cal_date"] = datetime.date(y+1, 1, 1)
+                request.session["cal_date"] = Date(y+1, 1, 1).as_dict()
             else:
-                state["cal_date"] = datetime.date(y, m+1, 1)
+                request.session["cal_date"] = Date(y, m+1, 1).as_dict()
             return redirect("/#calendar")
         
-        if request.POST.get("monthly") == "":
-             state["stat_type"] = "monthly"
-             return redirect("/#stats")
-        
-        if request.POST.get("yearly") == "":
-             state["stat_type"] = "yearly"
-             return redirect("/#stats")
-            
+        # go to current calendar month
         if request.POST.get("current") == "":
-            state["cal_date"] = datetime.date.today()
+            request.session["cal_date"] = Date.today().as_dict()
             return redirect("/#calendar")
         
+        # switch between monthly and yearly stats
+        if request.POST.get("monthly") == "":
+             request.session["stat_type"] = "monthly"
+             return redirect("/#stats")
+    
+        if request.POST.get("yearly") == "":
+             request.session["stat_type"] = "yearly"
+             return redirect("/#stats")
+        
+        # previous statistics month or year
         if request.POST.get("statprev") == "":
-            if state["stat_type"] == "monthly":
-                state["stat_date"] = state["stat_date"].replace(month=(state["stat_date"].month-1))
+            if request.session.get("stat_type") == "monthly":
+                if stat_date["month"] > 1:
+                    request.session["stat_date"] = date_from_dict(stat_date).replace(month=(stat_date["month"]-1)).as_dict()
+                else:
+                    request.session["stat_date"] = date_from_dict(stat_date).replace(month=12, year=stat_date["year"]-1).as_dict()
             else:
-                state["stat_date"] = state["stat_date"].replace(year=(state["stat_date"].year-1))
+                request.session["stat_date"] = date_from_dict(stat_date).replace(year=stat_date["year"]-1).as_dict()
             return redirect("/#stats")
         
+        # next statistics month or year
         if request.POST.get("statnext") == "":
-            if state["stat_type"] == "monthly":
-                state["stat_date"] = state["stat_date"].replace(month=(state["stat_date"].month+1))
+            if stat_type == "monthly":
+                if stat_date["month"] < 12:
+                    request.session["stat_date"] = date_from_dict(stat_date).replace(month=(stat_date["month"]+1)).as_dict()
+                else:
+                    request.session["stat_date"] = date_from_dict(stat_date).replace(month=1, year=stat_date["year"]+1).as_dict()
             else:
-                state["stat_date"] = state["stat_date"].replace(year=(state["stat_date"].year+1))
+                request.session["stat_date"] = date_from_dict(stat_date).replace(year=(stat_date["year"]+1)).as_dict()
             return redirect("/#stats")
         
+        # go to current stat month or year
+        if request.POST.get("stats_current") == "":
+            if stat_type == "monthly":
+                request.session["stat_date"] = date_from_dict(stat_date).replace(month=(Date.today().month)).as_dict()
+            else:
+                request.session["stat_date"] = date_from_dict(stat_date).replace(year=(Date.today().year)).as_dict()
+            return redirect("/#stats")
+        
+        # handle cursor presses on calendar days
         for day in range(1, 32):
             if request.POST.get(str(day)) == "":
-                state["review_date"] = datetime.date(state["cal_date"].year, state["cal_date"].month, day)
+                request.session["review_date"] = date_from_dict(cal_date).replace(day=day).as_dict()
                 return redirect('review')
             
-    
     try:
         user = request.user
     except:
         user = None
 
     context = {}
-    context["calendar"] = Calendar(calendar.MONDAY).formatmonth(state["cal_date"].year, state["cal_date"].month, user)
-
-    month = state["cal_date"].month
-    year = state["cal_date"].year
-    stat_type = state["stat_type"]
-    stat_date = state["stat_date"]
+    context["calendar"] = Calendar(calendar.MONDAY).formatmonth(request.session.get("cal_date")["year"], request.session.get("cal_date")["month"], user)
 
     if stat_type == "monthly":
         try:
-            days = Day.objects.all().filter(user = user).filter(date__year=stat_date.year).filter(date__month=stat_date.month)
+            days = Day.objects.all().filter(user = user).filter(date__year=stat_date['year']).filter(date__month=stat_date['month'])
         except:
             days = []
+
+        # dict with x and y values (x: y)
         axes = {int(day.date.day): int(day.mood) for day in days}
         
-        dates = numpy.array(range(1, monthrange(stat_date.year, stat_date.month)[1]+1))
+        # get x axis values
+        dates = numpy.array(range(1, monthrange(stat_date["year"], stat_date['month'])[1]+1))
+
+        # get all moods and mask none values
         moods = numpy.array([axes[day] if day in axes else None for day in dates])
         moods = numpy.ma.masked_where(moods == None, moods)
 
+        # create plot
         plt.figure(figsize=(10,5))
         plt.plot(dates, moods, 'o-', color='black')
         plt.xticks(dates)
         plt.yticks(range(1, 8))
 
+        # make temp file for plot
         tmpfile = BytesIO()
         plt.savefig(tmpfile, format='png', bbox_inches='tight')
         encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
@@ -125,12 +148,15 @@ def home(request):
         context["stats"] = '<img src=\'data:image/png;base64,{}\' alt="stats">'.format(encoded)
         
         plt.figure().clear()
+        plt.close()
 
     if stat_type == "yearly":
         try:
-            days = Day.objects.all().filter(user = user).filter(date__year=stat_date.year)
+            days = Day.objects.all().filter(user = user).filter(date__year=stat_date['year'])
         except:
             days = Day.objects.none()
+
+        # dict for month: avgmood
         month_ratings = {}
         for m in range(1, 13):
             month_days = days.filter(date__month=m)
@@ -140,38 +166,53 @@ def home(request):
                 avg = None
             month_ratings[m] = avg
         
-        x = numpy.array(range(1, 13))
-        y = [month_ratings[m] for m in range(1, 13)]
-        y = numpy.ma.masked_where(y == None, y)
+        # x and y values
+        dates = numpy.array(range(1, 13))
+        moods = [month_ratings[m] for m in range(1, 13)]
+        moods = numpy.ma.masked_where(moods == None, moods)
 
-        plt.plot(x, y, 'o-', color='black')
-        plt.xticks(x)
+        # create plot
+        plt.figure(figsize=(5,5))
+        plt.plot(dates, moods, 'o-', color='black')
+        plt.xticks(dates)
         plt.yticks(range(1, 8))
 
+        # temp file
         tmpfile = BytesIO()
-        plt.savefig(tmpfile, format='png')
+        plt.savefig(tmpfile, format='png', bbox_inches='tight')
         encoded = base64.b64encode(tmpfile.getvalue()).decode('utf-8')
 
         context["stats"] = '<img src=\'data:image/png;base64,{}\' alt="stats">'.format(encoded)
 
         plt.figure().clear()
+        plt.close()
     
     context["stat_type"] = stat_type
+
+    # display the month and year above graph
     if stat_type == "monthly":
-        context["stat_date"] = "%s %s" % (calendar.month_abbr[stat_date.month], stat_date.year)
+        context["stat_date"] = "%s %s" % (calendar.month_name[stat_date['month']], stat_date['year'])
     else:
-        context["stat_date"] = "%s" % (stat_date.year)
+        context["stat_date"] = "%s" % (stat_date['year'])
 
     return render(request, "home.html", context)
 
 @login_required(login_url='/login/')
 def review(request):
+    request.session.setdefault("cal_date", today.as_dict())
+    request.session.setdefault("review_date", today.as_dict())
+    request.session.setdefault("stat_type", "monthly")
+    request.session.setdefault("stat_date", today.as_dict())
+
+    cal_date = request.session.get("cal_date")
+    review_date = request.session.get("review_date")
+
     context = {}
     user = request.user
 
     # find any reviews already made
     try:
-        currents = Day.objects.all().filter(user = user).filter(date = state["review_date"])
+        currents = Day.objects.all().filter(user = user).filter(date = date_from_dict(review_date))
         current = currents[len(currents)-1]
     except:
         current = None
@@ -182,17 +223,9 @@ def review(request):
         if form.is_valid():
             review = form.save(commit=False)
             review.user = request.user
-            try:
-                review.month = Month.objects.filter(user = request.user).filter(month = int(state["review_date"].month)).get(year = int(state["review_date"].year))
-            except:
-                review.month = Month.objects.create(month=state["review_date"].month, year=state["review_date"].year, user=request.user)
-            print(review.month)
-            if not review.month:
-                review.month = Month.objects.create(month=state["review_date"].month, year=state["review_date"].year, user=request.user)
 
             # delete duplicates
             Day.objects.filter(date = review.date).delete()
-            print(Day.objects.all())
 
             review.save()
             return redirect("/#calendar")
@@ -202,40 +235,40 @@ def review(request):
 
         # if previous is clicked
         if request.POST.get("previous") == "":
-            y = state["cal_date"].year
-            m = state["cal_date"].month
+            y = cal_date["year"]
+            m = cal_date["month"]
             if m == 1:
-                state["cal_date"] = datetime.date(y-1, 12, 1)
+                request.session["cal_date"] = Date(y-1, 12, 1).as_dict()
             else:
-                state["cal_date"] = datetime.date(y, m-1, 1)
+                request.session["cal_date"] = Date(y, m-1, 1).as_dict()
             return redirect("/review/#calendar")
         
         # if next is clicked
         if request.POST.get("next") == "":
-            y = state["cal_date"].year
-            m = state["cal_date"].month
+            y = cal_date["year"]
+            m = cal_date["month"]
             if m == 12:
-                state["cal_date"] = datetime.date(y+1, 1, 1)
+                request.session["cal_date"] = Date(y+1, 1, 1).as_dict()
             else:
-                state["cal_date"] = datetime.date(y, m+1, 1)
+                request.session["cal_date"] = Date(y, m+1, 1).as_dict()
             return redirect("/review/#calendar")
         
         # if current is clicked
         if request.POST.get("current") == "":
-            state["cal_date"] = datetime.date.today()
+            request.session["cal_date"] = Date.today().as_dict()
             return redirect("/review/#calendar")
         
         # if a day is clicked
         for day in range(1, 32):
             if request.POST.get(str(day)) == "":
-                state["review_date"] = datetime.date(state["cal_date"].year, state["cal_date"].month, day)
+                request.session["review_date"] = date_from_dict(cal_date).replace(day=day).as_dict()
                 return redirect("/review/")
-    
+
     # if no review exist of the day
     if current == None:
         context['form'] = DayForm(
             initial={
-                'date': state["review_date"],
+                'date': date_from_dict(review_date),
             }
         )
     else:
@@ -244,11 +277,11 @@ def review(request):
                 'mood': current.mood,
                 'notes': current.notes,
                 'emotions': current.emotions,
-                'date': state["review_date"],
+                'date': date_from_dict(review_date),
             }
         )
 
-    context["calendar"] = Calendar(calendar.MONDAY).formatmonth(state["cal_date"].year, state["cal_date"].month, user)
-    state["review_date"] = datetime.date.today()
+    context["calendar"] = Calendar(calendar.MONDAY).formatmonth(cal_date["year"], cal_date["month"], user)
+    request.session["review_date"] = Date.today().as_dict()
 
     return render(request, "review.html", context)

@@ -1,22 +1,28 @@
 from calendar import HTMLCalendar, day_abbr, month_name
 import datetime
-from django.db import models
+
 from Calendar.models import Day
 
+
+class Date(datetime.date):
+    def as_dict(self) -> dict[int]:
+        return {"year": self.year, "month": self.month, "day": self.day}
+    
+def date_from_dict(d: dict) -> Date:
+    return Date(d["year"], d["month"], d["day"])
+
+
+# global vars for calendar class
 year = 2023
 month = 5
-
-class Date():
-    def __init__(self, day, month, year) -> None:
-        self.day = day
-        self.month = month
-        self.year = year
 
 class Calendar(HTMLCalendar):
     def __init__(self, firstweekday: int = 0) -> None:
         super().__init__(firstweekday)
 
     def formatday(self, day: int, weekday: int, user) -> str:
+
+        # filter out days outside of the month
         if day == 0 or user == None:
             mood = 0
         else:
@@ -25,7 +31,8 @@ class Calendar(HTMLCalendar):
                 mood = days[len(days)-1].mood
             except:
                 mood = 0
-        #string = r"{% static 'images/six.png' %}"
+
+        # pick color for day
         if mood == "0":
             color = "white"
         elif mood == "1":
@@ -81,9 +88,11 @@ class Calendar(HTMLCalendar):
             s = '%s %s' % (month_name[themonth], theyear)
         else:
             s = '%s' % month_name[themonth]
+
         prevbt = '<button type="submit" name="previous" class="previous">‹‹</button>'
         nextbt = '<button type="submit" name="next" class="next">››</button>'
         currentbt = '<button type="submit" name="current" class="current">Current</button>'
+
         return '<tr><th colspan="7" class="%s"><div class="p">%s%s%s</div>%s</th></tr>' % (self.cssclass_month_head, prevbt, s, nextbt, currentbt)
     
     def formatmonth(self, theyear, themonth, user, withyear=True):

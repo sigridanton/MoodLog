@@ -1,3 +1,0 @@
-# Todo:
-- stats page
-- when did i record? ...
