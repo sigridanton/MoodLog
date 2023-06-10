@@ -1,7 +1,6 @@
 import datetime
 from django import forms
 from Calendar.models import Day
-from image_uploader_widget.widgets import ImageUploaderWidget
 
 
 class DayForm(forms.ModelForm):
@@ -63,4 +62,3 @@ class DayForm(forms.ModelForm):
     def get(self, request):
         form = DayForm(forms.ModelForm)
         return form
-    

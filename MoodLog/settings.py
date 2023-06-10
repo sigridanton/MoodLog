@@ -40,7 +40,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'Calendar',
     'multiselectfield',
-    'image_uploader_widget',
 ]
 
 MIDDLEWARE = [
