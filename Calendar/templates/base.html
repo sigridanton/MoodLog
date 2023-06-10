@@ -9,24 +9,15 @@
   <title>{% block title %}Base{% endblock %}</title>
 
   <style>
-    td.bg-one {
-        background: #f0d1ba;
-    }
 
+    /* changed background color */
     html,body{
         margin:0px;
         height:100%;
         background-color: rgb(202, 213, 190);
     }
 
-    .html1 {
-        margin:0px;
-        height:100%;
-        background-color: rgb(202, 213, 190);
-        background: linear-gradient(to bottom, rgb(202, 213, 190) 36rem, rgb(137, 160, 113) 1rem);
-        height: 229vh;
-    }
-
+    /* studio ghibli background picture */
     img.img1{
         display:block;
         width:100%; 
@@ -34,6 +25,7 @@
         object-fit: cover;
     }
 
+    /* MoodLog logo */
     div.big {
         position: absolute;
         top: 20px;
@@ -44,7 +36,7 @@
         color: #ffffff;
     }
 
-
+    /* pretty links */
     div.link {
         display: flex;
         align-items: center;
@@ -56,6 +48,7 @@
         display: inline;
     }
 
+    /* big pretty links */
     div.link2 {
         display: flex;
         align-items: left;
@@ -67,6 +60,7 @@
         padding-left: 10px;
     }
 
+    /* changed color of links */
     .link > a{
         color: rgb(255, 255, 255);
     }
@@ -75,6 +69,7 @@
         color:#000000;
     }
 
+    /* all sorts of text */
     div.p {
         display: flex;
         align-items: center;
@@ -149,6 +144,7 @@
         width: 100%;
     }
 
+    /* mood buttons on home page */
     a.button {
         color: #000000;
         text-decoration: none;
@@ -177,7 +173,7 @@
 
 
 
-    /* Container holding the image and the text */
+    /* holds the background image */
     .container {
         position: relative;
         text-align: left;
@@ -249,6 +245,7 @@
         font-family: 'Prompt', sans-serif;
     } 
 
+    /* text used in login and signup and else */
     login {
         display: flex;
         align-items: center;
@@ -301,7 +298,7 @@
         border: none;
     }
 
-    /* button for 'previous' in calendar */
+    /* button for 'previous' in calendar and statistics */
     .previous {
         margin-right: 50px;
         background-color: #ffffff; /* Green */
@@ -316,7 +313,7 @@
         justify-content: left;
     }
 
-    /* button for 'next' in calendar */
+    /* button for 'next' in calendar and statistics */
     .next {
         margin-left: 50px;
         background-color: #ffffff; /* Green */
@@ -331,7 +328,7 @@
         justify-content: right;
     }
 
-    /* button for 'current' in calendar */
+    /* button for 'current' in calendar and statistics */
     .current {
         margin-top: 10px;
         background-color: transparent;
@@ -357,16 +354,6 @@
         align-items: center;
         display: flex;
         justify-content: center;
-    }
-
-    .stats_button {
-        position: relative;
-        background-color: transparent;
-        vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
-        justify-content: center;
-        align-items: center;
-        color: #ffffff;
-        border-color: #ffffff;
     }
 
   </style>
