@@ -1,51 +1,145 @@
 {% extends 'base.html' %}
+
 {% load static %}
+
 {% block title %}Home{% endblock %}
 
 {% block content %}
 
 <div class="container">
-  <img class="img1" src="https://www.thisiscolossal.com/wp-content/uploads/2020/09/ghibli-9-960x519@2x.jpg" alt="">
-  <div class="bottom-left"></div>
+
+  <img class="img1" src="{% static 'Calendar/ghibli_landscape.jpg' %}" alt="">
+
   <div class="top-left">
-    {% if user.is_authenticated %}
-    <div class="p">Hi, {{ user.username }}!</div>
-    {% endif %}
-  </div>
-  <div class="top-right">
-    {% if user.is_authenticated %}
-    <div class="link"><a href="{% url 'logout' %}">Log Out</a></div>
-    {% else %}
-    <div class="link"><a href="{% url 'signup' %}">Sign Up</a></div>
-    <div class="link"><a href="{% url 'login' %}">Log In</a></div>
-    {% endif %}
-  </div>
-  <div class="bottom-right"></div>
-  <div class="centered">MoodLog</div>
-  <div class="below_centered">
-    MoodLog is a website where you can record your mood and feelings!
+    <div class="big" onclick="location.href='/';" style="cursor: pointer;">MoodLog</div>
+
+    <br><br><br><br>
+
+    <div class="p1">
+      The Best Website <br> 
+      for recording <br> 
+      your Mood
+    </div>
+
+    <div class="p3">
+      Just click a few buttons!
+      <br><br><br>
+      How did your day go?
+    </div>
+
     <br>
-    Just click a few buttons!
+
+    <div class="container">
+      <a href="review/" class="button">1</a>
+      <a href="review/" class="button">2</a>
+      <a href="review/" class="button">3</a>
+      <a href="review/" class="button">4</a>
+      <a href="review/" class="button">5</a>
+      <a href="review/" class="button">6</a>
+      <a href="review/" class="button">7</a>
+    </div>
   </div>
+
+  <div class="top-right">
+
+    {% if user.is_authenticated %}
+
+      <div class="link">
+        <a href="{% url 'logout' %}">
+          Log Out
+        </a>
+      </div>
+
+    {% else %}
+
+      <div class="link"><a href="{% url 'signup' %}">Sign Up</a></div>
+      <div class="link"><a href="{% url 'login' %}">Log In</a></div>
+
+    {% endif %}
+  </div>
+
 </div> 
 
-<br><br><br><br><br><br><br>
+<br><br><br><br>
 
-<div class="p">How did your day go?</div>
-<br><br><br>
-    <div class="container">
-        <a href="review" class="button">1</a>
-        <a href="review" class="button">2</a>
-        <a href="review" class="button">3</a>
-        <a href="review" class="button">4</a>
-        <a href="review" class="button">5</a>
-        <a href="review" class="button">6</a>
-        <a href="review" class="button">7</a>
-    </div>
-    <div class="calendar_box">
-      {{ calendar | safe }}
-    </div>
+{% if user.is_authenticated %}
 
-<br><br><br><br><br><br>
+  <div class="p1_2">Calendar</div>
+
+  <div class="calendar_box" id="calendar">
+      <form method="post" action="/">
+        {% csrf_token %}
+        {{ form.as_p }}
+        {{ calendar | safe }}
+      </form>
+  </div>
+
+  <br><br><br>
+  <br><br><br>
+
+  <div class="p1_2">Statistics</div>
+
+  <div class="container" id="stats">
+    <form method="post" action="/">
+      {% csrf_token %}
+      
+      <div class="p">
+        <button type="submit" name="statprev" class="previous">‹‹</button>
+          {{ stat_date }}
+        <button type="submit" name="statnext" class="next">››</button>
+      </div>
+
+      <div class="current_box">
+        <button type="submit" name="monthly" class="current">Monthly</button>
+        <button type="submit" name="yearly" class="current">Yearly</button>
+        <button type="submit" name="stats_current" class="current">Current</button>
+      </div>
+
+    </form>
+
+    <br><br>
+
+  </div>
+
+  <div class="stats">{{ stats | safe }}</div>
+
+  <br><br><br><br><br>
+
+{% else %}
+
+  <br>
+
+  <div class="p1_2">About us</div>
+
+  <br><br>
+
+  <div class="p2_big">
+    MoodLog is a website that can help record your mood and analyze the changes happening with it.
+  </div>
+
+  <br><br>
+
+  <div class="p2">
+    MoodLog started as a school project but has grown into a website used by thousands every day.
+  </div>
+
+  <br>
+
+  <div class="p2">
+    The website was created to help people keep track of their mental health and get help when neccessary.
+    It can also be used as a form of keeping a journal or diary, hence the name Mood"Log"!
+  </div>
+  <br><br><br>
+
+  <div class="p2_big">
+    Sign up for free  
+    <div class="link2"><a href="{% url 'signup' %}">here</a></div>
+    !
+  </div>
+
+  <br><br><br><br><br>
+  <br><br><br><br><br>
+
+{% endif %}
 
 {% endblock %}

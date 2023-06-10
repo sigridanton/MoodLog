@@ -1,8 +1,18 @@
 from calendar import HTMLCalendar, day_abbr, month_name
 import datetime
-from django.db import models
+
 from Calendar.models import Day
 
+
+class Date(datetime.date):
+    def as_dict(self) -> dict[int]:
+        return {"year": self.year, "month": self.month, "day": self.day}
+    
+def date_from_dict(d: dict) -> Date:
+    return Date(d["year"], d["month"], d["day"])
+
+
+# global vars for calendar class
 year = 2023
 month = 5
 
@@ -10,21 +20,23 @@ class Calendar(HTMLCalendar):
     def __init__(self, firstweekday: int = 0) -> None:
         super().__init__(firstweekday)
 
-    def formatday(self, day: int, weekday: int) -> str:
-        if day == 0:
+    def formatday(self, day: int, weekday: int, user) -> str:
+
+        # filter out days outside of the month
+        if day == 0 or user == None:
             mood = 0
         else:
             try:
-                days = Day.objects.all().filter(date = datetime.date(year, month, day))
+                days = Day.objects.all().filter(user = user).filter(date = datetime.date(year, month, day))
                 mood = days[len(days)-1].mood
             except:
                 mood = 0
-        print(mood)
-        #string = r"{% static 'images/six.png' %}"
+
+        # pick color for day
         if mood == "0":
             color = "white"
         elif mood == "1":
-            color = "#0C3F0D"
+            color = "#345A2E"
         elif mood == "2":
             color = "#448936"
         elif mood == "3":
@@ -36,31 +48,29 @@ class Calendar(HTMLCalendar):
         elif mood == "6":
             color = "#EBEC76"
         elif mood == "7":
-            color = "#F0E456"
+            color = "#FEF8C4"
         else:
             color = "white"
-
-        #<img src="%s" width = "100" height = "auto" alt="">
 
         if day == 0:
             num = ""
         else:
             num = str(day)
         
-        return '<td height="70px" class="%s" bgcolor="%s">%s</td>' % (self.cssclasses[weekday], color, num)
+        return '<td class="%s" bgcolor="%s"><button class="daybt" type="submit" name="%s">%s</td>' % (self.cssclasses[weekday], color, num, num)
     
-    def formatweek(self, theweek):
+    def formatweek(self, theweek, user):
         """
         Return a complete week as a table row.
         """
-        s = ''.join(self.formatday(d, wd) for (d, wd) in theweek)
+        s = ''.join(self.formatday(d, wd, user) for (d, wd) in theweek)
         return '<tr>%s</tr>' % s
     
     def formatweekday(self, day):
         """
         Return a weekday name as a table header.
         """
-        return '<th class="%s"><div class="p2">%s</div></th>' % (
+        return '<th class="%s"><div class="calendar_text">%s</div></th>' % (
             self.cssclasses_weekday_head[day], day_abbr[day])
 
     def formatweekheader(self):
@@ -78,10 +88,14 @@ class Calendar(HTMLCalendar):
             s = '%s %s' % (month_name[themonth], theyear)
         else:
             s = '%s' % month_name[themonth]
-        return '<tr><th colspan="7" class="%s"><div class="p">%s</div></th></tr>' % (
-            self.cssclass_month_head, s)
+
+        prevbt = '<button type="submit" name="previous" class="previous">‹‹</button>'
+        nextbt = '<button type="submit" name="next" class="next">››</button>'
+        currentbt = '<button type="submit" name="current" class="current">Current</button>'
+
+        return '<tr><th colspan="7" class="%s"><div class="p">%s%s%s</div>%s</th></tr>' % (self.cssclass_month_head, prevbt, s, nextbt, currentbt)
     
-    def formatmonth(self, theyear, themonth, withyear=True):
+    def formatmonth(self, theyear, themonth, user, withyear=True):
         """
         Return a formatted month as a table.
         """
@@ -99,7 +113,7 @@ class Calendar(HTMLCalendar):
         a(self.formatweekheader())
         a('\n')
         for week in self.monthdays2calendar(theyear, themonth):
-            a(self.formatweek(week))
+            a(self.formatweek(week, user))
             a('\n')
         a('</table>')
         a('\n')

@@ -15,11 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
+from django import urls
 from Calendar import views
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic.base import TemplateView
 from Calendar.views import SignUpView
+from django.contrib import admin
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -29,4 +33,4 @@ urlpatterns = [
     #path("accounts/", include("accounts.urls")),
     path("signup/", SignUpView.as_view(), name="signup"),
     path('review/', views.review, name='review'),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

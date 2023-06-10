@@ -1,21 +1,31 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block title %}Sign Up{% endblock %}
+
 {% block content %}
 
-
   <div class="container">
-    <img src="https://www.thisiscolossal.com/wp-content/uploads/2020/09/ghibli-9-960x519@2x.jpg" alt="">
-    <div class="centered">
-      <login>Sign Up</login>
-  <login><form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Sign Up</button>
-    <button type="submit"><a href="{% url 'login' %}">Log In</button></div>
-  
-  </form></login>
+
+    <img class="img1" src="{% static 'Calendar/ghibli_landscape.jpg' %}" alt="">
+
+    <div class="top-left">
+      <div class="big" onclick="location.href='/';" style="cursor: pointer;">MoodLog</div>
     </div>
 
+    <div class="centered">
+      <login>Sign Up</login>
+      <login>
+        <form method="post">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit">Sign Up</button>
+          <button type="submit"><a href="{% url 'login' %}">Log In</button></div>
+        </form>
+      </login>
+    </div>
+
+  </div>
 
 {% endblock %}

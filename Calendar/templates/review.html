@@ -3,13 +3,47 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-<div class="p">How did your day go?</div>
 
-<form method="post" action="/review/">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Done</button>
-</form>
+  <login>How did your day go?</login>
 
+  <div class="top-left">
+    <div class="big" onclick="location.href='/';" style="cursor: pointer;">MoodLog</div>
+  </div>
+  
+  <login>
+    <form method="post" action="/review/">
+      {% csrf_token %}
+      <table>
+        <tr>
+          {% for field in form %}
+            <td>
+              <div class="container">
+                  {{ field.errors }}
+                  {{ field.label_tag }} <div class="form">{{ field }}</div>
+                  {% if field.help_text %}
+                      <p class="help">{{ field.help_text|safe }}</p>
+                  {% endif %}
+              </div>
+            </td>
+          {% endfor %}
+        </tr>
+      </table>
+
+      <button type="submit" name="review">Done</button>
+
+    </form>
+  </login>
+
+  <br>
+
+  <div class="calendar_box" id="calendar">
+      <form method="post" action="/review/">
+        {% csrf_token %}
+        {{ calform.as_p }}
+        {{ calendar | safe }}
+      </form>
+  </div>
+
+  <br><br><br><br><br>
 
 {% endblock %}
