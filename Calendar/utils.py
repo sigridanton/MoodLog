@@ -29,7 +29,7 @@ class Calendar(HTMLCalendar):
         if mood == "0":
             color = "white"
         elif mood == "1":
-            color = "#0C3F0D"
+            color = "#345A2E"
         elif mood == "2":
             color = "#448936"
         elif mood == "3":
@@ -41,7 +41,7 @@ class Calendar(HTMLCalendar):
         elif mood == "6":
             color = "#EBEC76"
         elif mood == "7":
-            color = "#F0E456"
+            color = "#FEF8C4"
         else:
             color = "white"
 
@@ -65,7 +65,7 @@ class Calendar(HTMLCalendar):
         """
         Return a weekday name as a table header.
         """
-        return '<th class="%s"><div class="p2">%s</div></th>' % (
+        return '<th class="%s"><div class="calendar_text">%s</div></th>' % (
             self.cssclasses_weekday_head[day], day_abbr[day])
 
     def formatweekheader(self):

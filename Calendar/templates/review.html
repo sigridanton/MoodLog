@@ -7,15 +7,21 @@
       <login>How did your day go?</login>
   <login><form method="post" action="/review/">
     {% csrf_token %}
-    {% for field in form %}
-        <div class="container">
-            {{ field.errors }}
-            {{ field.label_tag }} <div class="form">{{ field }}</div>
-            {% if field.help_text %}
-                <p class="help">{{ field.help_text|safe }}</p>
-            {% endif %}
-        </div>
-    {% endfor %}
+    <table>
+      <tr>
+        {% for field in form %}
+          <td>
+          <div class="container">
+              {{ field.errors }}
+              {{ field.label_tag }} <div class="form">{{ field }}</div>
+              {% if field.help_text %}
+                  <p class="help">{{ field.help_text|safe }}</p>
+              {% endif %}
+          </div>
+        </td>
+        {% endfor %}
+      </tr>
+    </table>
 
     <button type="submit" name="review">Done</button>  
   </form></login>

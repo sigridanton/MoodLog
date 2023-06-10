@@ -17,13 +17,13 @@
     </div>
     <br>
     <div class="container">
-      <a href="review" class="button">1</a>
-      <a href="review" class="button">2</a>
-      <a href="review" class="button">3</a>
-      <a href="review" class="button">4</a>
-      <a href="review" class="button">5</a>
-      <a href="review" class="button">6</a>
-      <a href="review" class="button">7</a>
+      <a href="review/" class="button">1</a>
+      <a href="review/" class="button">2</a>
+      <a href="review/" class="button">3</a>
+      <a href="review/" class="button">4</a>
+      <a href="review/" class="button">5</a>
+      <a href="review/" class="button">6</a>
+      <a href="review/" class="button">7</a>
   </div>
   </div>
   <div class="top-right">
@@ -65,9 +65,22 @@
     </form>
   </div>
   <div class="stats">{{ stats | safe }}</div>
+{% else %}
+<div class="html1">
+<div class="p1_2">About us</div>
+<br>
+<div class="p2_big">MoodLog is a website that can help record your mood and analyze the changes happening with it.</div>
+<br><br>
+<div class="p2">MoodLog started as a school project but has grown into a website used by thousands every day.</div>
+<br>
+<div class="p2">The website was created to help people keep track of their mental health and get help when neccessary.
+  It can also be used as a form of keeping a journal or diary, hence the name Mood"Log"!
+</div>
+<br><br><br><br><br><br><br><br><br><br><br>
 
+<img src="/Calendar/mood_screenshot.png" width="900px" height="auto"/>
+
+</div>
 {% endif %}
-
-<br><br><br><br><br><br>
 
 {% endblock %}
