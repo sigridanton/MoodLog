@@ -74,9 +74,24 @@ div.link {
       display: inline;
     }
 
+div.link2 {
+      display: flex;
+      align-items: left;
+      justify-content: left;
+      text-align: left;
+      font-size: 2.5rem;
+      font-family: 'Prompt', sans-serif;
+      color: #ffffff;
+      padding-left: 10px;
+}
+
 .link > a{
       color: rgb(255, 255, 255);
     }
+
+.link2 > a{
+  color:#000000;
+}
 
 div.p {
       display: flex;
@@ -305,22 +320,32 @@ login {
 
 /* button for 'previous' in calendar */
 .previous {
-  background-color: transparent;
-  vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
-  justify-content: left;
   margin-right: 50px;
-  color: #ffffff;
-  border-color: #ffffff;
+  background-color: #ffffff; /* Green */
+  border: none;
+  color: rgb(0, 0, 0);
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 30px;
+  justify-content: left;
 }
 
 /* button for 'next' in calendar */
 .next {
-  background-color: transparent;
-  vertical-align: middle; /* this currently has no effect because there is no "diplay: ..." attribute */
-  justify-content: right;
   margin-left: 50px;
-  color: #ffffff;
-  border-color: #ffffff;
+  background-color: #ffffff; /* Green */
+  border: none;
+  color: rgb(0, 0, 0);
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  border-radius: 30px;
+  justify-content: right;
 }
 
 /* button for 'current' in calendar */
@@ -329,6 +354,14 @@ login {
   background-color: transparent;
   color: #ffffff;
   border-color: #ffffff;
+  font-family: 'Prompt', sans-serif;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.current_box {
+  margin-left: 660px;
 }
 
 p.form {
